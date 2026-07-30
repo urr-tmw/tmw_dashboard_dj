@@ -1,0 +1,24 @@
+# Byte-compiled / compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+# Ignore all Django migration files
+**/migrations/*.py
+!**/migrations/__init__.py
+**/migrations/*.pyc
+
+# Virtual environment
+.tmw_dashboard_venv/
+# Ignore environment variables file
+.env
+
+*.egg-info/
+Pipfile
+Pipfile.lock
+
+# Logs and databases
+
+*.log
+*.sqlite3
+requirements.txt
