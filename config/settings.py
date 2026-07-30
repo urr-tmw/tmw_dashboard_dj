@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from utils.unified_django_print import dj_print
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,9 +31,35 @@ SECRET_KEY = 'django-insecure-a^&3i5mt$$qk24g%v_sezgzp1w7^1$p(hvmaa@a#-c9*h(nx(b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+# Get the current environment
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
+BASE_URL_DEV = os.getenv('BASE_URL_DEV')
+BASE_URL_PREPROD = os.getenv('BASE_URL_PREPROD')
+BASE_URL_PROD = os.getenv('BASE_URL_PROD')
+
+# Map environment names to their respective BASE_URLs
+BASE_URLS = {
+    'dev': BASE_URL_DEV,
+    'staging': os.getenv('BASE_URL_STAGING'),
+    'preprod': BASE_URL_PREPROD,
+    'prod': BASE_URL_PROD
+}
+# Select BASE_URL based on the current environment
+BASE_URL = BASE_URLS.get(ENVIRONMENT)
+if not BASE_URL:
+    raise ValueError(f"BASE_URL is not set for environment: {ENVIRONMENT}")
 
 
+
+# AWS S3 Configuration
+AWS_ACCESS_KEY_ID=os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY=os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_S3_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_NAME')
+AWS_REGION=os.getenv('AWS_REGION')
+
+dj_print(f"Current Environment: {ENVIRONMENT,BASE_URL}")
+ALLOWED_HOSTS = ["10.200.39.222","10.200.39.100"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -54,7 +86,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,12 +105,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
