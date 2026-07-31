@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from utils.unified_django_print import dj_print
-import os
 from dotenv import load_dotenv
-
+from zoneinfo import ZoneInfo
+from django.utils import timezone
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -58,8 +59,8 @@ AWS_SECRET_ACCESS_KEY=os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_S3_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_NAME')
 AWS_REGION=os.getenv('AWS_REGION')
 
-dj_print(f"Current Environment: {ENVIRONMENT,BASE_URL}")
-ALLOWED_HOSTS = ["10.200.39.222","10.200.39.100"]
+
+ALLOWED_HOSTS = ["10.200.39.222","10.200.39.100","10.200.39.30","10.200.39.50"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -69,6 +70,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
+    # 'django_filters',
+    # 'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -152,6 +156,30 @@ USE_I18N = True
 
 USE_TZ = True
 
+utc_time = timezone.now()
+ist_time = utc_time.astimezone(ZoneInfo("Asia/Kolkata"))
+formatted_time = ist_time.strftime("%A, %d %B %Y | %I:%M:%S %p")
+from pprint import pformat
+db = DATABASES["default"]
+dj_print(f"Current Indian Time: {formatted_time}")
+dj_print(f"Current Environment: {ENVIRONMENT}, BASE_URL: {BASE_URL}")
+# dj_print(f"database settings: {pformat(DATABASES['default'])}")
+dj_print(
+    f"""
+🗄️ Database Configuration [{ENVIRONMENT.upper()}]
+_____________________________________________________\n
+🔹 Engine    : {db['ENGINE']}
+🔹 Database  : {db['NAME']}
+🔹 Host      : {db['HOST']}
+🔹 Port      : {db['PORT']}
+🔹 User      : {db['USER']}
+🔹 Password  : {'*' * len(db['PASSWORD']) if db['PASSWORD'] else '(empty)'}
+_____________________________________________________
+"""
+)
+dj_print(f"STATIC_ROOT: {STATIC_ROOT}")
+dj_print(f"STATICFILES_DIRS: {pformat(STATICFILES_DIRS)}")
+dj_print(f"MEDIA_ROOT: {MEDIA_ROOT}")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
