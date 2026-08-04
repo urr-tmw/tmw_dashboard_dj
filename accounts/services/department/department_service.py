@@ -54,6 +54,26 @@ class DepartmentService:
 
         return serializer.instance
 
+
+
+
+
+    @staticmethod
+    @transaction.atomic
+    def partial_update_department(department_id, data):
+
+        department = DepartmentService.get_department_by_id(department_id)
+
+        serializer = DepartmentSerializer(
+            department,
+            data=data,
+            partial=True,
+        )
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return serializer.instance
     @staticmethod
     @transaction.atomic
     def change_department_status(department_id, is_active):

@@ -79,3 +79,18 @@ class DepartmentAPIView(APIView):
             data=serializer.data,
             http_status=status.HTTP_200_OK,
         )
+
+    def patch(self, request, department_id):
+        department = DepartmentService.partial_update_department(
+            department_id,
+            request.data,
+        )
+
+        serializer = DepartmentSerializer(department)
+
+        return api_response(
+            success=True,
+            message=UPDATED_SUCCESSFULLY.format(DEPARTMENT),
+            data=serializer.data,
+            http_status=status.HTTP_200_OK,
+        )
