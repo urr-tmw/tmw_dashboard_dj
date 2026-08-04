@@ -1,19 +1,17 @@
 from django.contrib import admin
 
-# Register your models here.
-from django.contrib import admin
-from accounts.models.department import Department
+from accounts.models import Department
 
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
+
     list_display = (
         "id",
         "dept_name",
         "dept_code",
         "is_active",
         "created_at",
-        "updated_at",
     )
 
     search_fields = (
