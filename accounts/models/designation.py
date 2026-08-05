@@ -1,8 +1,8 @@
 from django.db import models
 from accounts.models import Department
+from common.base_model import BaseModel
 
-
-class Designation(models.Model):
+class Designation(BaseModel):
     department = models.ForeignKey(
         Department,
         on_delete=models.PROTECT,
@@ -14,10 +14,7 @@ class Designation(models.Model):
 
     description = models.TextField(blank=True, null=True)
 
-    is_active = models.BooleanField(default=True)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "designation"

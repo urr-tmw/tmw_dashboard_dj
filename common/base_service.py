@@ -81,7 +81,14 @@ class BaseMasterService:
 
         return instance
 
+    @classmethod
+    @transaction.atomic
+    def delete(cls, object_id):
 
+        instance = cls.get_by_id(object_id)
+        instance.delete()
+
+        return instance
 
 
 

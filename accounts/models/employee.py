@@ -3,13 +3,14 @@ from django.db import models
 from django.conf import settings
 from .department import Department
 from .designation import Designation
+from common.base_model import TimeStampedModel
 
-
-class Employee(models.Model):
+class Employee(TimeStampedModel):
 
     class EmployeeStatus(models.TextChoices):
         ACTIVE = "ACTIVE", "Active"
-        INACTIVE = "INACTIVE", "Inactive"
+        PROBATION = "PROBATION", "Probation"
+        NOTICE_PERIOD = "NOTICE_PERIOD", "Notice Period"
         RESIGNED = "RESIGNED", "Resigned"
         TERMINATED = "TERMINATED", "Terminated"
 
@@ -43,7 +44,11 @@ class Employee(models.Model):
         blank=True,
         related_name="team_members",
     )
-
+    roles = models.ManyToManyField(
+    "Role",
+    blank=True,
+    related_name="employees",
+)
     joining_date = models.DateField()
 
     dashboard_access = models.BooleanField(default=True)
@@ -53,10 +58,6 @@ class Employee(models.Model):
         choices=EmployeeStatus.choices,
         default=EmployeeStatus.ACTIVE,
     )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "employee"

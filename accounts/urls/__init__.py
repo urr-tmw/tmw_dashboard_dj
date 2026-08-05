@@ -12,6 +12,20 @@ urlpatterns = [
         "designations/",
         include("accounts.urls.designation_urls"),
     ),
+
+    path(
+        "permissions/",
+        include("accounts.urls.permission_urls"),
+    ),
+
+    path(
+        "roles/",
+        include("accounts.urls.role_urls"),
+    ),
+    path(
+        "employees/",
+        include("accounts.urls.employee_urls"),
+    ),
       # Coming Next
     # path(
     #     "employees/",
