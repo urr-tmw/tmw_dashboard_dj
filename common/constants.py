@@ -11,6 +11,8 @@ CREATED_SUCCESSFULLY = "{} created successfully."
 UPDATED_SUCCESSFULLY = "{} updated successfully."
 FETCHED_SUCCESSFULLY = "{} fetched successfully."
 LIST_FETCHED_SUCCESSFULLY = "{}s fetched successfully."
+RETRIEVED_SUCCESSFULLY = "{} retrieved successfully."
+DELETED_SUCCESSFULLY = "{} deleted successfully."
 STATUS_UPDATED_SUCCESSFULLY = "{} status updated successfully."
 
 

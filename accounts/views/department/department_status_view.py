@@ -19,9 +19,9 @@ class DepartmentStatusAPIView(APIView):
     """
 
     def patch(self, request, department_id):
-
-        department = DepartmentService.change_department_status(
-            department_id=department_id,
+        print("request.data", request.data)
+        department = DepartmentService.update_status(
+            object_id=department_id,
             is_active=request.data.get("is_active"),
         )
 

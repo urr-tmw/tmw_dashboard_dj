@@ -26,7 +26,7 @@ class DepartmentAPIView(APIView):
         """
 
         if department_id:
-            department = DepartmentService.get_department_by_id(department_id)
+            department = DepartmentService.get_by_id(department_id)
             serializer = DepartmentSerializer(department)
 
             return api_response(
@@ -36,7 +36,7 @@ class DepartmentAPIView(APIView):
                 http_status=status.HTTP_200_OK,
             )
 
-        departments = DepartmentService.get_all_departments()
+        departments = DepartmentService.get_queryset()
         serializer = DepartmentSerializer(departments, many=True)
 
         return api_response(
@@ -51,7 +51,7 @@ class DepartmentAPIView(APIView):
         Create Department
         """
 
-        department = DepartmentService.create_department(request.data)
+        department = DepartmentService.create(request.data)
         serializer = DepartmentSerializer(department)
 
         return api_response(
@@ -66,7 +66,7 @@ class DepartmentAPIView(APIView):
         Update Department
         """
 
-        department = DepartmentService.update_department(
+        department = DepartmentService.update(
             department_id,
             request.data,
         )
@@ -81,7 +81,10 @@ class DepartmentAPIView(APIView):
         )
 
     def patch(self, request, department_id):
-        department = DepartmentService.partial_update_department(
+        """
+        Partial Update Department
+        """
+        department = DepartmentService.partial_update(
             department_id,
             request.data,
         )

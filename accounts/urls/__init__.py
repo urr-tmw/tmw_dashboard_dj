@@ -7,12 +7,12 @@ urlpatterns = [
         include("accounts.urls.department_urls"),
     ),
 
-    # Coming Next
-    # path(
-    #     "designations/",
-    #     include("accounts.urls.designation_urls"),
-    # ),
-
+  
+    path(
+        "designations/",
+        include("accounts.urls.designation_urls"),
+    ),
+      # Coming Next
     # path(
     #     "employees/",
     #     include("accounts.urls.employee_urls"),
