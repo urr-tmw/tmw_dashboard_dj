@@ -1,7 +1,10 @@
 from django.urls import include, path
 
 urlpatterns = [
-
+    path(
+        "auth/",
+        include("accounts.urls.auth_urls"),
+    ),
     path(
         "departments/",
         include("accounts.urls.department_urls"),
@@ -26,14 +29,7 @@ urlpatterns = [
         "employees/",
         include("accounts.urls.employee_urls"),
     ),
-      # Coming Next
-    # path(
-    #     "employees/",
-    #     include("accounts.urls.employee_urls"),
-    # ),
 
-    # path(
-    #     "auth/",
-    #     include("accounts.urls.auth_urls"),
-    # ),
+
+
 ]

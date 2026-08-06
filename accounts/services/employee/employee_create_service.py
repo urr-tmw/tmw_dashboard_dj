@@ -28,7 +28,7 @@ class EmployeeCreateService:
         # -------------------------
         roles = validated_data.pop("roles", [])
         print("Roles:", roles)
-        employee.roles.set(roles)
+        
         # -------------------------
         # Create User
         # -------------------------

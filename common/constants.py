@@ -43,3 +43,16 @@ PERMISSION = "Permission"
 MODULE = "Module"
 MENU = "Menu"
 USER = "User"
+
+# ==========================
+# System Roles / Permissions
+# ==========================
+SUPER_ADMIN_PERMISSION = "*"
+SYSTEM_ADMIN_ROLE = "SYSTEM_ADMIN"
+
+# ==========================
+# login / logout
+# ==========================
+LOGIN_SUCCESSFUL = "Login successful."
+TOKEN_REFRESHED_SUCCESSFULLY = "Token refreshed successfully."
+LOGOUT_SUCCESSFUL = "Logout successful."
