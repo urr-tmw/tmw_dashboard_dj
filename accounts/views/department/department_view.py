@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 
 from accounts.serializers.department.department_serializer import DepartmentSerializer
 from accounts.services.department.department_service import DepartmentService
-
+from utils.decorators import validate_required_keys
 from common.constants import (
     CREATED_SUCCESSFULLY,
     UPDATED_SUCCESSFULLY,
@@ -45,6 +45,13 @@ class DepartmentAPIView(APIView):
             data=serializer.data,
             http_status=status.HTTP_200_OK,
         )
+
+
+
+    @validate_required_keys(
+    required_keys=["dept_name", "dept_code"],
+    source="data",
+)
 
     def post(self, request):
         """

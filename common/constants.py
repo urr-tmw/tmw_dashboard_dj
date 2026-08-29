@@ -48,7 +48,7 @@ USER = "User"
 # System Roles / Permissions
 # ==========================
 SUPER_ADMIN_PERMISSION = "*"
-SYSTEM_ADMIN_ROLE = "SYSTEM_ADMIN"
+SYSTEM_ADMIN_ROLE = "SUPER_ADMIN"
 
 # ==========================
 # login / logout

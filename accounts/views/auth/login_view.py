@@ -8,6 +8,7 @@ from accounts.services.auth.login_service import LoginService
 from common.constants import LOGIN_SUCCESSFUL
 
 from utils.unified_response import api_response
+from utils.decorators import validate_required_keys
 
 
 class LoginAPIView(APIView):
@@ -16,7 +17,10 @@ class LoginAPIView(APIView):
     """
 
     permission_classes = [AllowAny]
-
+    @validate_required_keys(
+    required_keys=["login", "password"],
+    source="data"
+)
     def post(self, request):
         """
         Login using Username/Email + Password

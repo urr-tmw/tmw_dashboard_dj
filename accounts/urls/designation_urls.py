@@ -2,11 +2,16 @@
 
 from django.urls import path
 
-from accounts.views.designation.designation_view import DesignationAPIView
+from accounts.views.designation.designation_view import DesignationAPIView, DesignationChoicesByDepartmentAPIView
 from accounts.views.designation.designation_status_view import DesignationStatusAPIView
 
 
 urlpatterns = [
+    path(
+        "choices/",
+        DesignationChoicesByDepartmentAPIView.as_view(),
+        name="designation-choices-by-department",
+    ),
     path(
         "",
         DesignationAPIView.as_view(),
