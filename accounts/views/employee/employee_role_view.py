@@ -1,3 +1,5 @@
+# accounts/views/employee/employee_role_view.py
+
 from rest_framework import status
 from rest_framework.views import APIView
 
@@ -9,15 +11,26 @@ from accounts.serializers.role.role_serializer import RoleSerializer
 from accounts.services.employee.employee_role_service import (
     EmployeeRoleService,
 )
+from common.permissions import EmployeePermission
 from utils.unified_response import api_response
 
 
 class EmployeeRoleAPIView(APIView):
     """
     Assign / Remove / Replace Employee Roles
+
+    All role mutations require employee.update permission since
+    they modify the employee's role assignments.
     """
 
     permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "GET":    EmployeePermission.VIEW,
+        "POST":   EmployeePermission.UPDATE,
+        "PUT":    EmployeePermission.UPDATE,
+        "DELETE": EmployeePermission.UPDATE,
+    }
 
     def get(self, request, employee_id):
 

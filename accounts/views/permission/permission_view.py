@@ -1,3 +1,5 @@
+# accounts/views/permission/permission_view.py
+
 from rest_framework import status
 from rest_framework.views import APIView
 
@@ -11,7 +13,7 @@ from common.constants import (
     LIST_FETCHED_SUCCESSFULLY,
     PERMISSION,
 )
-
+from common.permissions import PermissionConstant
 from utils.unified_response import api_response
 from accounts.permissions.dashboard_permission import DashboardPermission
 
@@ -19,9 +21,19 @@ from accounts.permissions.dashboard_permission import DashboardPermission
 class PermissionAPIView(APIView):
     """
     Permission CRUD APIs
+
+    Permissions enforced per HTTP method via RBAC permission_map.
     """
 
     permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "GET":    PermissionConstant.VIEW,
+        "POST":   PermissionConstant.CREATE,
+        "PUT":    PermissionConstant.UPDATE,
+        "PATCH":  PermissionConstant.UPDATE,
+        "DELETE": PermissionConstant.DELETE,
+    }
 
     def get(self, request, permission_id=None):
         """

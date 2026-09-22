@@ -1,3 +1,5 @@
+# accounts/views/department/department_view.py
+
 from rest_framework import status
 from rest_framework.views import APIView
 
@@ -11,15 +13,28 @@ from common.constants import (
     LIST_FETCHED_SUCCESSFULLY,
     DEPARTMENT,
 )
-
+from common.permissions import DepartmentPermission
 from utils.unified_response import api_response
 from accounts.permissions.dashboard_permission import DashboardPermission
-from rest_framework.permissions import AllowAny
+
+
 class DepartmentAPIView(APIView):
     """
     Department CRUD APIs
+
+    Permissions enforced per HTTP method via RBAC permission_map.
     """
+
     permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "GET":    DepartmentPermission.VIEW,
+        "POST":   DepartmentPermission.CREATE,
+        "PUT":    DepartmentPermission.UPDATE,
+        "PATCH":  DepartmentPermission.UPDATE,
+        "DELETE": DepartmentPermission.DELETE,
+    }
+
     def get(self, request, department_id=None):
         """
         List all departments or retrieve a single department.
@@ -46,13 +61,10 @@ class DepartmentAPIView(APIView):
             http_status=status.HTTP_200_OK,
         )
 
-
-
     @validate_required_keys(
-    required_keys=["dept_name", "dept_code"],
-    source="data",
-)
-
+        required_keys=["dept_name", "dept_code"],
+        source="data",
+    )
     def post(self, request):
         """
         Create Department
@@ -91,6 +103,7 @@ class DepartmentAPIView(APIView):
         """
         Partial Update Department
         """
+
         department = DepartmentService.partial_update(
             department_id,
             request.data,

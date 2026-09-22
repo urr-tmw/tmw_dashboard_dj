@@ -13,6 +13,12 @@ class PermissionService:
         """
 
         # -----------------------------
+        # Anonymous User
+        # -----------------------------
+        if not user.is_authenticated:
+            return False
+
+        # -----------------------------
         # Super Admin
         # -----------------------------
         if user.is_superuser:

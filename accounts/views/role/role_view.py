@@ -1,3 +1,5 @@
+# accounts/views/role/role_view.py
+
 from rest_framework import status
 from rest_framework.views import APIView
 
@@ -11,7 +13,7 @@ from common.constants import (
     LIST_FETCHED_SUCCESSFULLY,
     ROLE,
 )
-
+from common.permissions import RolePermission
 from utils.unified_response import api_response
 from accounts.permissions.dashboard_permission import DashboardPermission
 
@@ -19,9 +21,19 @@ from accounts.permissions.dashboard_permission import DashboardPermission
 class RoleAPIView(APIView):
     """
     Role CRUD APIs
+
+    Permissions enforced per HTTP method via RBAC permission_map.
     """
 
     permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "GET":    RolePermission.VIEW,
+        "POST":   RolePermission.CREATE,
+        "PUT":    RolePermission.UPDATE,
+        "PATCH":  RolePermission.UPDATE,
+        "DELETE": RolePermission.DELETE,
+    }
 
     def get(self, request, role_id=None):
         """

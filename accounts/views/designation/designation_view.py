@@ -1,6 +1,8 @@
+# accounts/views/designation/designation_view.py
+
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
 from rest_framework import status
+
 from accounts.permissions.dashboard_permission import DashboardPermission
 from utils.unified_response import api_response
 
@@ -13,15 +15,26 @@ from common.constants import (
     CREATED_SUCCESSFULLY,
     UPDATED_SUCCESSFULLY,
     RETRIEVED_SUCCESSFULLY,
-    DELETED_SUCCESSFULLY,
-    STATUS_UPDATED_SUCCESSFULLY,
 )
-
+from common.permissions import DesignationPermission
 
 
 class DesignationAPIView(APIView):
+    """
+    Designation CRUD APIs
+
+    Permissions enforced per HTTP method via RBAC permission_map.
+    """
 
     permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "GET":    DesignationPermission.VIEW,
+        "POST":   DesignationPermission.CREATE,
+        "PUT":    DesignationPermission.UPDATE,
+        "PATCH":  DesignationPermission.UPDATE,
+        "DELETE": DesignationPermission.DELETE,
+    }
 
     def get(self, request, designation_id=None):
 
@@ -122,6 +135,10 @@ class DesignationChoicesByDepartmentAPIView(APIView):
     """
 
     permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "GET": DesignationPermission.VIEW,
+    }
 
     def get(self, request):
 

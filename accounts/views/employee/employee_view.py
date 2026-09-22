@@ -1,3 +1,5 @@
+# accounts/views/employee/employee_view.py
+
 from rest_framework import status
 from rest_framework.views import APIView
 
@@ -14,10 +16,10 @@ from common.constants import (
     LIST_FETCHED_SUCCESSFULLY,
     EMPLOYEE,
 )
+from common.permissions import EmployeePermission
 from accounts.serializers.employee.employee_create_serializer import (
     EmployeeCreateSerializer,
 )
-
 from accounts.services.employee.employee_create_service import (
     EmployeeCreateService,
 )
@@ -27,9 +29,19 @@ from utils.unified_response import api_response
 class EmployeeAPIView(APIView):
     """
     Employee CRUD APIs
+
+    Permissions enforced per HTTP method via RBAC permission_map.
     """
 
     permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "GET":    EmployeePermission.VIEW,
+        "POST":   EmployeePermission.CREATE,
+        "PUT":    EmployeePermission.UPDATE,
+        "PATCH":  EmployeePermission.UPDATE,
+        "DELETE": EmployeePermission.DELETE,
+    }
 
     def get(self, request, employee_id=None):
 
@@ -70,7 +82,7 @@ class EmployeeAPIView(APIView):
         )
 
         serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
+
         employee = EmployeeCreateService.create_employee(
             serializer.validated_data,
         )

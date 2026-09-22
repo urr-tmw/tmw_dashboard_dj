@@ -7,7 +7,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from accounts.models import Employee
 from common.constants import (
     SUPER_ADMIN_PERMISSION,
-    SYSTEM_ADMIN_ROLE,
+    SYSTEM_ADMIN_ROLE_NAME,
+    SYSTEM_ADMIN_ROLE_CODE,
 )
 User = get_user_model()
 
@@ -68,8 +69,8 @@ class LoginService:
                 "roles": [
                     {
                         "id": 0,
-                        "role_name": "System Administrator",
-                        "role_code": SYSTEM_ADMIN_ROLE,
+                        "role_name": SYSTEM_ADMIN_ROLE_NAME,
+                        "role_code": SYSTEM_ADMIN_ROLE_CODE,
                     }
                 ],
                 "permissions": [SUPER_ADMIN_PERMISSION],

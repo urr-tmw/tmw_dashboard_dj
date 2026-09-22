@@ -1,3 +1,5 @@
+# accounts/views/department/department_status_view.py
+
 from rest_framework import status
 from rest_framework.views import APIView
 
@@ -8,18 +10,25 @@ from common.constants import (
     STATUS_UPDATED_SUCCESSFULLY,
     DEPARTMENT,
 )
-
+from common.permissions import DepartmentPermission
 from utils.unified_response import api_response
-from rest_framework.permissions import AllowAny
 from accounts.permissions.dashboard_permission import DashboardPermission
+
+
 class DepartmentStatusAPIView(APIView):
-    permission_classes = [DashboardPermission]
     """
     Activate / Deactivate Department
+
+    PATCH is treated as an update action.
     """
 
+    permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "PATCH": DepartmentPermission.UPDATE,
+    }
+
     def patch(self, request, department_id):
-        print("request.data", request.data)
         department = DepartmentService.update_status(
             object_id=department_id,
             is_active=request.data.get("is_active"),

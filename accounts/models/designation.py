@@ -31,4 +31,4 @@ class Designation(BaseModel):
         ]
 
     def __str__(self):
-        return f"{self.designation_name} ({self.department.dept_name})"
+        return f"{self.designation_name}"

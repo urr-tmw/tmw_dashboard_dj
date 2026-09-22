@@ -1,3 +1,5 @@
+# accounts/views/role/role_permission_view.py
+
 from rest_framework import status
 from rest_framework.views import APIView
 
@@ -11,15 +13,26 @@ from accounts.serializers.role.role_permission_serializer import (
 from accounts.services.role.role_permission_service import (
     RolePermissionService,
 )
+from common.permissions import RolePermission
 from utils.unified_response import api_response
 
 
 class RolePermissionAPIView(APIView):
     """
     Assign / Remove / Replace Role Permissions
+
+    All operations require role.update permission since they
+    mutate the role's permission set.
     """
 
     permission_classes = [DashboardPermission]
+
+    permission_map = {
+        "GET":    RolePermission.VIEW,
+        "POST":   RolePermission.UPDATE,
+        "PUT":    RolePermission.UPDATE,
+        "DELETE": RolePermission.UPDATE,
+    }
 
     def get(self, request, role_id):
 

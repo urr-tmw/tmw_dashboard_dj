@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.views import APIView
 
 from accounts.services.auth.me_service import MeService
@@ -21,7 +21,7 @@ class MeAPIView(APIView):
         data = MeService.get_profile(
             request.user,
         )
-
+        # data={}
         return api_response(
             success=True,
             message=FETCHED_SUCCESSFULLY.format("Profile"),

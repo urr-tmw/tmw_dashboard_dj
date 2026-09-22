@@ -64,4 +64,4 @@ class Employee(TimeStampedModel):
         ordering = ["employee_code"]
 
     def __str__(self):
-        return f"{self.employee_code} - {self.user.get_full_name()}"
+        return f"{self.employee_code} - {self.user.username}-{self.department.dept_name}-{self.designation.designation_name}"
