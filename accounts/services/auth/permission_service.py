@@ -7,6 +7,44 @@ class PermissionService:
     """
 
     @staticmethod
+    def group_by_module(employee):
+        """
+        Returns the employee's permissions as one list per module.
+
+        {
+            "Department": ["department.view", "department.create"],
+            "Employee": ["employee.view"]
+        }
+        """
+
+        rows = (
+            employee.roles
+            .order_by(
+                "permissions__module",
+                "permissions__action",
+                "permissions__permission_code",
+            )
+            .values_list(
+                "permissions__module",
+                "permissions__permission_code",
+            )
+            .distinct()
+        )
+
+        grouped = {}
+
+        for module, code in rows:
+            if not module or not code:
+                continue
+
+            codes = grouped.setdefault(module, [])
+
+            if code not in codes:
+                codes.append(code)
+
+        return grouped
+
+    @staticmethod
     def has_permission(user, required_permission):
         """
         Returns True if the user has the required permission.

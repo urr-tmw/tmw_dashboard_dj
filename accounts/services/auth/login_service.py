@@ -5,6 +5,8 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from accounts.models import Employee
+from accounts.services.auth.menu_service import MenuService
+from accounts.services.auth.permission_service import PermissionService
 from common.constants import (
     SUPER_ADMIN_PERMISSION,
     SYSTEM_ADMIN_ROLE_NAME,
@@ -61,19 +63,25 @@ class LoginService:
 
             access = refresh.access_token
 
+            permissions = {
+                "*": [SUPER_ADMIN_PERMISSION],
+            }
+            roles = [
+                {
+                    "id": 0,
+                    "role_name": SYSTEM_ADMIN_ROLE_NAME,
+                    "role_code": SYSTEM_ADMIN_ROLE_CODE,
+                }
+            ]
+
             return {
                 "refresh": str(refresh),
                 "access": str(access),
                 "user": user,
                 "employee": None,
-                "roles": [
-                    {
-                        "id": 0,
-                        "role_name": SYSTEM_ADMIN_ROLE_NAME,
-                        "role_code": SYSTEM_ADMIN_ROLE_CODE,
-                    }
-                ],
-                "permissions": [SUPER_ADMIN_PERMISSION],
+                "roles": roles,
+                "permissions": permissions,
+                "menus": MenuService.build(permissions, roles),
             }
         # ------------------------------------------------
         # Employee Validation
@@ -121,15 +129,9 @@ class LoginService:
         # Permissions
         # ------------------------------------------------
 
-        permissions = list(
-            employee.roles
-            .prefetch_related("permissions")
-            .values_list(
-                "permissions__permission_code",
-                flat=True,
-            )
-            .distinct()
-        )
+        permissions = PermissionService.group_by_module(employee)
+        menus = MenuService.build(permissions, roles)
+        permissions = MenuService.visible_permissions(permissions, menus)
 
         return {
             "refresh": str(refresh),
@@ -138,4 +140,5 @@ class LoginService:
             "employee": employee,
             "roles": roles,
             "permissions": permissions,
+            "menus": menus,
         }

@@ -54,6 +54,7 @@ class LoginAPIView(APIView):
             "employee": None,
             "roles": login_data["roles"],
             "permissions": login_data["permissions"],
+            "menus": login_data["menus"],
         }
 
         if employee:
